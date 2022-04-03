@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "337429431110",
+    "project_id": "ndiabetes-f58d0",
+    "storage_bucket": "ndiabetes-f58d0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:337429431110:android:7110a8414a53bf882fdb47",
+        "android_client_info": {
+          "package_name": "com.example.ndiabetes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "337429431110-acnufmaqr8o1bhhg9ckaesqd62kia728.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZvPg_5hx-i619Ao306VXIcKMNeb6MRc4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "337429431110-acnufmaqr8o1bhhg9ckaesqd62kia728.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
