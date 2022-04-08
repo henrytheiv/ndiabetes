@@ -128,7 +128,7 @@ class _SignUpPage extends State<SignUpPage> {
                       controller: weightController,
                       keyboardType: TextInputType.number,
                       decoration: const InputDecoration(
-                          border: OutlineInputBorder(), labelText: "Weight"),
+                          border: OutlineInputBorder(), labelText: "Weight (kg)"),
                       validator: (value) {
                         if (value!.isEmpty) {
                           return "Please enter weight";
@@ -141,7 +141,7 @@ class _SignUpPage extends State<SignUpPage> {
                       controller: heightController,
                       keyboardType: TextInputType.number,
                       decoration: const InputDecoration(
-                          border: OutlineInputBorder(), labelText: "Height"),
+                          border: OutlineInputBorder(), labelText: "Height (cm)"),
                       validator: (value) {
                         if (value!.isEmpty) {
                           return "Please enter height";

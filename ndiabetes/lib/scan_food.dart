@@ -19,6 +19,8 @@ class _MyHomePageState extends State<ScanFoodPage> {
   double? _imageHeight;
   double? _imageWidth;
   ImagePicker? imagePicker;
+  List? _foodItems = [];
+  bool hasFood = false;
 
   @override
   void initState() {
@@ -28,15 +30,17 @@ class _MyHomePageState extends State<ScanFoodPage> {
 
   _imgFromCamera() async {
     final XFile? pickedFile =
-    await imagePicker!.pickImage(source: ImageSource.camera);
+        await imagePicker!.pickImage(source: ImageSource.camera);
     File image = File(pickedFile!.path);
     predictImage(image);
   }
 
   //TODO chose image gallery
   _imgFromGallery() async {
+    _foodItems!.clear();
+    hasFood = false;
     final XFile? pickedFile =
-    await imagePicker!.pickImage(source: ImageSource.gallery);
+        await imagePicker!.pickImage(source: ImageSource.gallery);
     File image = File(pickedFile!.path);
     predictImage(image);
   }
@@ -73,7 +77,6 @@ class _MyHomePageState extends State<ScanFoodPage> {
     });
   }
 
-
   //TODO perform inference using ssdNet model
   Future ssdMobileNet(File image) async {
     int startTime = new DateTime.now().millisecondsSinceEpoch;
@@ -88,9 +91,17 @@ class _MyHomePageState extends State<ScanFoodPage> {
         numResultsPerClass: 2,
         // defaults to 5
         asynch: true // defaults to true
-    );
+        );
     setState(() {
       _recognitions = recognitions;
+
+      for (var _item in _recognitions!) {
+        _foodItems!.add(_item.toString().substring(
+            _item.toString().lastIndexOf(': ') + 2,
+            _item.toString().length - 1));
+      }
+
+      print(_foodItems);
     });
     int endTime = new DateTime.now().millisecondsSinceEpoch;
     print("Inference took ${endTime - startTime}ms");
@@ -140,17 +151,41 @@ class _MyHomePageState extends State<ScanFoodPage> {
       width: size.width,
       child: _image.path == ""
           ? Center(
-          child: Container(
-              margin: EdgeInsets.only(top: size.height / 2 - 140),
-              child: Icon(
-                Icons.image_rounded,
-                color: Colors.white,
-                size: 100,
-              )))
+              child: Container(
+                  margin: EdgeInsets.only(top: size.height / 2 - 140),
+                  child: Icon(
+                    Icons.image_rounded,
+                    color: Colors.white,
+                    size: 100,
+                  )))
           : Image.file(_image),
     ));
     //TODO draw rectangles around detected faces
-    stackChildren.addAll(renderBoxes(size));
+
+    if (_foodItems!.contains('banana') ||
+        _foodItems!.contains('apple') ||
+        _foodItems!.contains('sandwich') ||
+        _foodItems!.contains('orange') ||
+        _foodItems!.contains('broccoli') ||
+        _foodItems!.contains('carrot') ||
+        _foodItems!.contains('hot dog') ||
+        _foodItems!.contains('pizza') ||
+        _foodItems!.contains('donut') ||
+        _foodItems!.contains('cake')) {
+      hasFood = true;
+      stackChildren.addAll(renderBoxes(size));
+    } else {
+      stackChildren.add(const Expanded(
+        child: Align(
+          alignment: FractionalOffset.centerLeft,
+          child: Text("Image doesn't contain food items.",
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center),
+        ),
+      ));
+    }
+
     //TODO bottom bar code
     stackChildren.add(
       Container(
@@ -181,15 +216,28 @@ class _MyHomePageState extends State<ScanFoodPage> {
       ),
     );
 
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: Container(
-        margin: EdgeInsets.only(top: 50),
-        color: Colors.black,
-        child: Stack(
-          children: stackChildren,
+    if (hasFood = true) {
+      return Scaffold(
+        backgroundColor: Colors.black,
+        body: Container(
+          margin: EdgeInsets.only(top: 50),
+          color: Colors.black,
+          child: Stack(
+            children: stackChildren,
+          ),
         ),
-      ),
-    );
+      );
+    } else {
+      return Scaffold(
+        backgroundColor: Colors.black,
+        body: Container(
+          margin: EdgeInsets.only(top: 50),
+          color: Colors.black,
+          child: Stack(
+            children: stackChildren,
+          ),
+        ),
+      );
+    }
   }
 }

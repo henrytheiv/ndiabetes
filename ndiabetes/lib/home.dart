@@ -65,12 +65,12 @@ class _Homepage extends State<Homepage> {
 
                       createSnackBar('Logged in.');
                       Navigator.pushNamed(context, '/scan_food');
-
                     } on FirebaseAuthException catch (e) {
                       if (e.code == 'user-not-found') {
                         createSnackBar('No user found for that email.');
                       } else if (e.code == 'wrong-password') {
-                        createSnackBar('Wrong password provided for that user.');
+                        createSnackBar(
+                            'Wrong password provided for that user.');
                       }
                     }
                   },
