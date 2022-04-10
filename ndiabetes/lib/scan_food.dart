@@ -28,7 +28,7 @@ class _MyHomePageState extends State<ScanFoodPage> {
     imagePicker = ImagePicker();
   }
 
-  _imgFromCamera() async {
+  captureImage() async {
     final XFile? pickedFile =
         await imagePicker!.pickImage(source: ImageSource.camera);
     File image = File(pickedFile!.path);
@@ -36,7 +36,7 @@ class _MyHomePageState extends State<ScanFoodPage> {
   }
 
   //TODO chose image gallery
-  _imgFromGallery() async {
+  uploadImage() async {
     _foodItems!.clear();
     hasFood = false;
     final XFile? pickedFile =
@@ -197,14 +197,14 @@ class _MyHomePageState extends State<ScanFoodPage> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               ElevatedButton(
-                onPressed: _imgFromCamera,
+                onPressed: captureImage,
                 child: Icon(
                   Icons.camera,
                   color: Colors.white,
                 ),
               ),
               ElevatedButton(
-                onPressed: _imgFromGallery,
+                onPressed: uploadImage,
                 child: Icon(
                   Icons.image,
                   color: Colors.white,

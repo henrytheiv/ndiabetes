@@ -13,6 +13,9 @@ class _Homepage extends State<Homepage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
+  final _formKey = GlobalKey<FormState>();
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,50 +34,65 @@ class _Homepage extends State<Homepage> {
                         fontWeight: FontWeight.w500,
                         fontSize: 30),
                   )),
-              Container(
-                padding: EdgeInsets.all(10),
-                child: TextFormField(
-                    controller: emailController,
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(), labelText: "Email"),
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "Please enter email";
-                      }
-                    }),
-              ),
-              Container(
-                padding: EdgeInsets.all(10),
-                child: TextFormField(
-                    controller: passwordController,
-                    obscureText: true,
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(), labelText: "Password"),
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "Please enter password";
-                      }
-                    }),
-              ),
-              ElevatedButton(
-                  onPressed: () async {
-                    try {
-                      await FirebaseAuth.instance.signInWithEmailAndPassword(
-                          email: emailController.text.toString(),
-                          password: passwordController.text.toString());
+              Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(10),
+                      child: TextFormField(
+                          controller: emailController,
+                          decoration: const InputDecoration(
+                              border: OutlineInputBorder(), labelText: "Email"),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Please enter email";
+                            }
+                            if(!RegExp(r'^.+@[a-zA-Z]+\.{1}[a-zA-Z]+(\.{0,1}[a-zA-Z]+)$').hasMatch(value)){
+                              return "Please enter valid email";
+                            }
+                          }),
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(10),
+                      child: TextFormField(
+                          controller: passwordController,
+                          obscureText: true,
+                          decoration: const InputDecoration(
+                              border: OutlineInputBorder(), labelText: "Password"),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Please enter password";
+                            }
+                          }),
+                    ),
+                    ElevatedButton(
+                        onPressed: () async {
 
-                      createSnackBar('Logged in.');
-                      Navigator.pushNamed(context, '/scan_food');
-                    } on FirebaseAuthException catch (e) {
-                      if (e.code == 'user-not-found') {
-                        createSnackBar('No user found for that email.');
-                      } else if (e.code == 'wrong-password') {
-                        createSnackBar(
-                            'Wrong password provided for that user.');
-                      }
-                    }
-                  },
-                  child: const Text("Log In")),
+                          if(_formKey.currentState!.validate()){
+                            try {
+                              await FirebaseAuth.instance.signInWithEmailAndPassword(
+                                  email: emailController.text.toString(),
+                                  password: passwordController.text.toString());
+
+                              createSnackBar('Logged in.');
+                              Navigator.pushNamed(context, '/scan_food');
+                            } on FirebaseAuthException catch (e) {
+                              if (e.code == 'user-not-found') {
+                                createSnackBar('No user found for that email.');
+                              } else if (e.code == 'wrong-password') {
+                                createSnackBar(
+                                    'Wrong password provided for that user.');
+                              }
+                            }
+                          }
+                        },
+                        child: const Text("Log In"))
+                  ],
+                ),
+
+              ),
               Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 const Align(
                     alignment: Alignment.centerLeft,

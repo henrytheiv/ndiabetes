@@ -5,7 +5,7 @@ CollectionReference users = FirebaseFirestore.instance.collection('users');
 class Database {
 
   static Future<void> addUser(String uid, String firstName, String lastName,
-      String email, String password, String gender,
+      String email, String password, int age, String gender,
       double weight, double height, String diseaseType) async {
     // Call the user's CollectionReference to add a new user
     users.doc(uid).set({
@@ -13,6 +13,7 @@ class Database {
       'lastName': lastName, // Stokes and Sons
       'email': email,
       'password' : password,
+      'age': age,
       'gender' : gender,
       'weight' : weight,
       'height' : height,
