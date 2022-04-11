@@ -37,8 +37,6 @@ class _MyHomePageState extends State<ScanFoodPage> {
 
   //TODO chose image gallery
   uploadImage() async {
-    _foodItems!.clear();
-    hasFood = false;
     final XFile? pickedFile =
         await imagePicker!.pickImage(source: ImageSource.gallery);
     File image = File(pickedFile!.path);
@@ -95,13 +93,11 @@ class _MyHomePageState extends State<ScanFoodPage> {
     setState(() {
       _recognitions = recognitions;
 
-      for (var _item in _recognitions!) {
-        _foodItems!.add(_item.toString().substring(
-            _item.toString().lastIndexOf(': ') + 2,
-            _item.toString().length - 1));
-      }
+      _recognitions!.whereType<Map>().forEach((re) {
+        _foodItems!.add(re['detectedClass']);
+      });
 
-      print(_foodItems);
+      print(_recognitions);
     });
     int endTime = new DateTime.now().millisecondsSinceEpoch;
     print("Inference took ${endTime - startTime}ms");
@@ -162,29 +158,34 @@ class _MyHomePageState extends State<ScanFoodPage> {
     ));
     //TODO draw rectangles around detected faces
 
-    if (_foodItems!.contains('banana') ||
-        _foodItems!.contains('apple') ||
-        _foodItems!.contains('sandwich') ||
-        _foodItems!.contains('orange') ||
-        _foodItems!.contains('broccoli') ||
-        _foodItems!.contains('carrot') ||
-        _foodItems!.contains('hot dog') ||
-        _foodItems!.contains('pizza') ||
-        _foodItems!.contains('donut') ||
-        _foodItems!.contains('cake')) {
-      hasFood = true;
-      stackChildren.addAll(renderBoxes(size));
-    } else {
-      stackChildren.add(const Expanded(
-        child: Align(
-          alignment: FractionalOffset.centerLeft,
-          child: Text("Image doesn't contain food items.",
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center),
-        ),
-      ));
-    }
+
+      if (_foodItems!.contains('banana') ||
+          _foodItems!.contains('apple') ||
+          _foodItems!.contains('sandwich') ||
+          _foodItems!.contains('orange') ||
+          _foodItems!.contains('broccoli') ||
+          _foodItems!.contains('carrot') ||
+          _foodItems!.contains('hot dog') ||
+          _foodItems!.contains('pizza') ||
+          _foodItems!.contains('donut') ||
+          _foodItems!.contains('cake')) {
+        hasFood = true;
+        stackChildren.addAll(renderBoxes(size));
+      } else {
+        stackChildren.add(const Expanded(
+          child: Align(
+            alignment: FractionalOffset.centerLeft,
+            child: Text("Image doesn't contain food items.",
+                style:
+                TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center),
+          ),
+        ));
+      }
+
+
+
+
 
     //TODO bottom bar code
     stackChildren.add(
