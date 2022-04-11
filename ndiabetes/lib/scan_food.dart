@@ -29,14 +29,18 @@ class _MyHomePageState extends State<ScanFoodPage> {
   }
 
   captureImage() async {
+    _foodItems!.clear();
+    hasFood = false;
     final XFile? pickedFile =
         await imagePicker!.pickImage(source: ImageSource.camera);
     File image = File(pickedFile!.path);
     predictImage(image);
   }
 
-  //TODO chose image gallery
+  //upload image from gallery
   uploadImage() async {
+    _foodItems!.clear();
+    hasFood = false;
     final XFile? pickedFile =
         await imagePicker!.pickImage(source: ImageSource.gallery);
     File image = File(pickedFile!.path);
@@ -75,7 +79,7 @@ class _MyHomePageState extends State<ScanFoodPage> {
     });
   }
 
-  //TODO perform inference using ssdNet model
+  //perform inference using ssdNet model
   Future ssdMobileNet(File image) async {
     int startTime = new DateTime.now().millisecondsSinceEpoch;
     var recognitions = await Tflite.detectObjectOnImage(
@@ -156,7 +160,7 @@ class _MyHomePageState extends State<ScanFoodPage> {
                   )))
           : Image.file(_image),
     ));
-    //TODO draw rectangles around detected faces
+    //draw rectangles around detected faces
 
 
       if (_foodItems!.contains('banana') ||
@@ -187,7 +191,7 @@ class _MyHomePageState extends State<ScanFoodPage> {
 
 
 
-    //TODO bottom bar code
+    //bottom tab bar
     stackChildren.add(
       Container(
         height: size.height,
