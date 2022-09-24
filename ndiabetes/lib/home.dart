@@ -1,6 +1,8 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutterfire_ui/auth.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({Key? key}) : super(key: key);
@@ -15,106 +17,132 @@ class _Homepage extends State<Homepage> {
 
   final _formKey = GlobalKey<FormState>();
 
-
   @override
   Widget build(BuildContext context) {
+    const providerConfigs = [EmailProviderConfiguration()];
+
     return Scaffold(
-        appBar: AppBar(title: const Text('ndiabetes')),
-        body: Padding(
-          padding: EdgeInsets.all(10),
-          child: ListView(
-            children: [
-              Container(
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.all(10),
-                  child: const Text(
-                    "Log In",
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 30),
-                  )),
-              Form(
-                key: _formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      padding: EdgeInsets.all(10),
-                      child: TextFormField(
-                          controller: emailController,
-                          decoration: const InputDecoration(
-                              border: OutlineInputBorder(), labelText: "Email"),
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return "Please enter email";
-                            }
-                            if(!RegExp(r'^.+@[a-zA-Z]+\.{1}[a-zA-Z]+(\.{0,1}[a-zA-Z]+)$').hasMatch(value)){
-                              return "Please enter valid email";
-                            }
-                          }),
-                    ),
-                    Container(
-                      padding: EdgeInsets.all(10),
-                      child: TextFormField(
-                          controller: passwordController,
-                          obscureText: true,
-                          decoration: const InputDecoration(
-                              border: OutlineInputBorder(), labelText: "Password"),
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return "Please enter password";
-                            }
-                          }),
-                    ),
-                    ElevatedButton(
-                        onPressed: () async {
+      appBar: AppBar(title: const Text('ndiabetes')),
+      body: SignInScreen(
+        providerConfigs: providerConfigs,
+        actions: [
+          AuthStateChangeAction<SignedIn>((context, state) {
+            Navigator.pushReplacementNamed(context, '/scan_food');
+          }),
+        ],
 
-                          if(_formKey.currentState!.validate()){
-                            try {
-                              await FirebaseAuth.instance.signInWithEmailAndPassword(
-                                  email: emailController.text.toString(),
-                                  password: passwordController.text.toString());
+      ),
 
-                              createSnackBar('Logged in.');
-                              Navigator.pushNamed(context, '/scan_food');
-                            } on FirebaseAuthException catch (e) {
-                              if (e.code == 'user-not-found') {
-                                createSnackBar('No user found for that email.');
-                              } else if (e.code == 'wrong-password') {
-                                createSnackBar(
-                                    'Wrong password provided for that user.');
-                              }
-                            }
-                          }
-                        },
-                        child: const Text("Log In"))
-                  ],
-                ),
+    );
 
-              ),
-              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                const Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text("Doesn't have an account?")),
-                Container(
-                    child: TextButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/sign_up');
-                  },
-                  child: const Text('Sign up here'),
-                ))
-              ]),
-              Container(
-                  child: TextButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/scan_food');
-                },
-                child: const Text('Use without account'),
-              ))
-            ],
-          ),
-        ));
+    // '/profile': (context) {
+    //   return ProfileScreen(
+    //     providerConfigs: providerConfigs,
+    //     actions: [
+    //       SignedOutAction((context) {
+    //         Navigator.pushReplacementNamed(context, '/sign-in');
+    //       }),
+    //     ],
+    //   );
+    // },
+
+    // return Scaffold(
+    //     appBar: AppBar(title: const Text('ndiabetes')),
+    //     body: Padding(
+    //       padding: EdgeInsets.all(10),
+    //       child: ListView(
+    //         children: [
+    //           Container(
+    //               alignment: Alignment.center,
+    //               padding: EdgeInsets.all(10),
+    //               child: const Text(
+    //                 "Log In",
+    //                 style: TextStyle(
+    //                     color: Colors.black,
+    //                     fontWeight: FontWeight.w500,
+    //                     fontSize: 30),
+    //               )),
+    //           Form(
+    //             key: _formKey,
+    //             child: Column(
+    //               mainAxisAlignment: MainAxisAlignment.center,
+    //               children: [
+    //                 Container(
+    //                   padding: EdgeInsets.all(10),
+    //                   child: TextFormField(
+    //                       controller: emailController,
+    //                       decoration: const InputDecoration(
+    //                           border: OutlineInputBorder(), labelText: "Email"),
+    //                       validator: (value) {
+    //                         if (value!.isEmpty) {
+    //                           return "Please enter email";
+    //                         }
+    //                         if(!RegExp(r'^.+@[a-zA-Z]+\.{1}[a-zA-Z]+(\.{0,1}[a-zA-Z]+)$').hasMatch(value)){
+    //                           return "Please enter valid email";
+    //                         }
+    //                       }),
+    //                 ),
+    //                 Container(
+    //                   padding: EdgeInsets.all(10),
+    //                   child: TextFormField(
+    //                       controller: passwordController,
+    //                       obscureText: true,
+    //                       decoration: const InputDecoration(
+    //                           border: OutlineInputBorder(), labelText: "Password"),
+    //                       validator: (value) {
+    //                         if (value!.isEmpty) {
+    //                           return "Please enter password";
+    //                         }
+    //                       }),
+    //                 ),
+    //                 ElevatedButton(
+    //                     onPressed: () async {
+    //
+    //                       if(_formKey.currentState!.validate()){
+    //                         try {
+    //                           await FirebaseAuth.instance.signInWithEmailAndPassword(
+    //                               email: emailController.text.toString(),
+    //                               password: passwordController.text.toString());
+    //
+    //                           createSnackBar('Logged in.');
+    //                           Navigator.pushNamed(context, '/scan_food');
+    //                         } on FirebaseAuthException catch (e) {
+    //                           if (e.code == 'user-not-found') {
+    //                             createSnackBar('No user found for that email.');
+    //                           } else if (e.code == 'wrong-password') {
+    //                             createSnackBar(
+    //                                 'Wrong password provided for that user.');
+    //                           }
+    //                         }
+    //                       }
+    //                     },
+    //                     child: const Text("Log In"))
+    //               ],
+    //             ),
+    //
+    //           ),
+    //           Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+    //             const Align(
+    //                 alignment: Alignment.centerLeft,
+    //                 child: Text("Doesn't have an account?")),
+    //             Container(
+    //                 child: TextButton(
+    //               onPressed: () {
+    //                 Navigator.pushNamed(context, '/sign_up');
+    //               },
+    //               child: const Text('Sign up here'),
+    //             ))
+    //           ]),
+    //           Container(
+    //               child: TextButton(
+    //             onPressed: () {
+    //               Navigator.pushNamed(context, '/scan_food');
+    //             },
+    //             child: const Text('Use without account'),
+    //           ))
+    //         ],
+    //       ),
+    //     ));
   }
 
   void createSnackBar(String message) {
