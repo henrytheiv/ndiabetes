@@ -270,7 +270,7 @@ class _MyHomePageState extends State<ScanFoodPage> {
 }
 
 Future<String?> asyncSimpleDialog(BuildContext context, String currentLabel) async {
-  List<String> foods = ['Apple', 'Cake', 'Egg', 'Orange', 'Tomato', 'Others'];
+  List<String> foods = ['Apple', 'Cake', 'Egg', 'Orange', 'Tomato'];
 
   foods.remove(currentLabel);
 
