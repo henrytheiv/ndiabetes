@@ -31,7 +31,8 @@ class _Homepage extends State<Homepage> {
     // },
 
     return Scaffold(
-        appBar: AppBar(title: const Text('ndiabetes')),
+        appBar: AppBar(title: const Text('ndiabetes'),
+        automaticallyImplyLeading: false),
         body: Padding(
           padding: EdgeInsets.all(10),
           child: ListView(

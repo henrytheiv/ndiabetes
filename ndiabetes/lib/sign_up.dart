@@ -37,7 +37,8 @@ class _SignUpPage extends State<SignUpPage> {
     String dropdownValue = 'Diabetes';
 
     return Scaffold(
-        appBar: AppBar(title: Text("ndiabetes")),
+        appBar:
+            AppBar(title: Text("ndiabetes"), automaticallyImplyLeading: false),
         body: Padding(
             padding: EdgeInsets.all(10),
             child: ListView(
@@ -576,64 +577,81 @@ class _SignUpPage extends State<SignUpPage> {
                       //     )
                       //   ],
                       // ),
-                      Container(
-                        height: 50,
-                        padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
-                        child: ElevatedButton(
-                          child: Text("Sign Up"),
-                          onPressed: () async {
-                            if (_formKey.currentState!.validate()) {
-                              try {
-                                await FirebaseAuth.instance
-                                    .createUserWithEmailAndPassword(
-                                        email: emailController.text.toString(),
-                                        password:
-                                            passwordController.text.toString());
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            height: 50,
+                            padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
+                            child: ElevatedButton(
+                              onPressed: () {
+                                Navigator.pushNamed(context, '/homepage');
+                              },
+                              child: Text("Back"),
+                            ),
+                          ),
+                          Container(
+                            height: 50,
+                            padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
+                            child: ElevatedButton(
+                              child: Text("Sign Up"),
+                              onPressed: () async {
+                                if (_formKey.currentState!.validate()) {
+                                  try {
+                                    await FirebaseAuth.instance
+                                        .createUserWithEmailAndPassword(
+                                            email:
+                                                emailController.text.toString(),
+                                            password: passwordController.text
+                                                .toString());
 
-                                final User? user = auth.currentUser;
-                                final uid = user?.uid;
+                                    final User? user = auth.currentUser;
+                                    final uid = user?.uid;
 
-                                var firstName =
-                                    firstNameController.text.toString();
-                                var lastName =
-                                    lastNameController.text.toString();
-                                var email = emailController.text.toString();
-                                var password =
-                                    passwordController.text.toString();
-                                var age = int.parse(ageController.text);
-                                var weight =
-                                    double.parse(weightController.text);
-                                var height =
-                                    double.parse(heightController.text);
+                                    var firstName =
+                                        firstNameController.text.toString();
+                                    var lastName =
+                                        lastNameController.text.toString();
+                                    var email = emailController.text.toString();
+                                    var password =
+                                        passwordController.text.toString();
+                                    var age = int.parse(ageController.text);
+                                    var weight =
+                                        double.parse(weightController.text);
+                                    var height =
+                                        double.parse(heightController.text);
 
-                                Database.addUser(
-                                    uid!,
-                                    firstName,
-                                    lastName,
-                                    email,
-                                    password,
-                                    age,
-                                    _genderChoice.name,
-                                    weight,
-                                    height,
-                                    'diabetes');
+                                    Database.addUser(
+                                        uid!,
+                                        firstName,
+                                        lastName,
+                                        email,
+                                        password,
+                                        age,
+                                        _genderChoice.name,
+                                        weight,
+                                        height,
+                                        'diabetes');
 
-                                createSnackBar('Signed up successfully.');
-                                Navigator.pushNamed(context, '/');
-                              } on FirebaseAuthException catch (e) {
-                                if (e.code == 'weak-password') {
-                                  createSnackBar(
-                                      'The password provided is too weak.');
-                                } else if (e.code == 'email-already-in-use') {
-                                  createSnackBar(
-                                      'The account already exists for that email.');
+                                    createSnackBar('Signed up successfully.');
+                                    Navigator.pushNamed(context, '/homepage');
+                                  } on FirebaseAuthException catch (e) {
+                                    if (e.code == 'weak-password') {
+                                      createSnackBar(
+                                          'The password provided is too weak.');
+                                    } else if (e.code ==
+                                        'email-already-in-use') {
+                                      createSnackBar(
+                                          'The account already exists for that email.');
+                                    }
+                                  } catch (e) {
+                                    print(e);
+                                  }
                                 }
-                              } catch (e) {
-                                print(e);
-                              }
-                            }
-                          },
-                        ),
+                              },
+                            ),
+                          )
+                        ],
                       )
                     ],
                   ),

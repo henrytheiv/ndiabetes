@@ -132,7 +132,8 @@ class _MyHomePageState extends State<ScanFoodPage> {
           ),
           child: TextButton(
             onPressed: () async {
-              final String? foodName = await asyncSimpleDialog(context, re.label);
+              final String? foodName =
+                  await asyncSimpleDialog(context, re.label);
 
               if (foodName != null) {
                 var index = _recognitions.indexOf(re);
@@ -142,19 +143,18 @@ class _MyHomePageState extends State<ScanFoodPage> {
               }
               print("Selected Product is $foodName");
             },
-
             child: Text(
-                "${re.label} ${(re.score * 100).toStringAsFixed(0)}%",
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  background: Paint()..color = Colors.yellow,
-                  fontSize: 15.0,
-                ),
+              "${re.label} ${(re.score * 100).toStringAsFixed(0)}%",
+              textAlign: TextAlign.start,
+              style: TextStyle(
+                background: Paint()..color = Colors.yellow,
+                fontSize: 15.0,
+              ),
             ),
             style: TextButton.styleFrom(
               primary: Colors.black,
               alignment: Alignment.topLeft,
-            padding: EdgeInsets.all(0.0),
+              padding: EdgeInsets.all(0.0),
             ),
           ),
         ),
@@ -166,7 +166,6 @@ class _MyHomePageState extends State<ScanFoodPage> {
 
   @override
   Widget build(BuildContext context) {
-
     Size size = MediaQuery.of(context).size;
     List<Widget> stackChildren = [];
 
@@ -177,88 +176,115 @@ class _MyHomePageState extends State<ScanFoodPage> {
       child: _image.path == ""
           ? Center(
               child: Container(
-                  margin: EdgeInsets.only(top: size.height / 2 - 140),
+                  margin: EdgeInsets.only(top: size.height / 2 - 200),
                   child: Icon(
                     Icons.image_rounded,
                     color: Colors.white,
                     size: 100,
                   )))
           : Image.file(_image),
-      )
-    );
+    ));
     //draw rectangles around detected faces
 
     stackChildren.addAll(renderBoxes(size));
 
-    if(_recognitions.isNotEmpty) {
-      stackChildren.add(Align(alignment: Alignment.topCenter ,child: Text("Tap on a food name to rename", style: TextStyle(color: Colors.white))));
+    if (_recognitions.isNotEmpty) {
+      stackChildren.add(Align(
+          alignment: Alignment.topCenter,
+          child: Text("Tap on a food name to rename",
+              style: TextStyle(color: Colors.white))));
     }
 
     //bottom tab bar
     stackChildren.add(
       Container(
-        height: size.height,
-        alignment: Alignment.bottomCenter,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            if (_recognitions.isNotEmpty)
-          Container(
-            width: size.width,
-            padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                primary: Colors.greenAccent, // background
-                onPrimary: Colors.black, // foreground
-              ),
-              onPressed: () {Navigator.pushNamed(context, '/rating', arguments: _recognitions); },
-              child: Text('Next'),
-            ),
-          ),
-            Container(
-              color: Colors.white,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ElevatedButton(
-                    onPressed: captureImage,
-                    child: Icon(
-                      Icons.camera,
-                      color: Colors.white,
+          height: size.height,
+          alignment: Alignment.bottomCenter,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              if (_recognitions.isNotEmpty)
+                Container(
+                  width: 200,
+                  padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.blue[100], // background
+                      onPrimary: Colors.black, // foreground
                     ),
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/rating',
+                          arguments: _recognitions);
+                    },
+                    child: Text('See Rating'),
                   ),
-                  ElevatedButton(
-                    onPressed: uploadImage,
-                    child: Icon(
-                      Icons.image,
-                      color: Colors.white,
+                ),
+              Container(
+                color: Colors.white,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.blue[900],
+                      ),
+                      onPressed: captureImage,
+                      child: Icon(
+                        Icons.camera,
+                        color: Colors.white,
+                      ),
                     ),
-                  ),
-                ],
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.blue[900],
+                      ),
+                      onPressed: uploadImage,
+                      child: Icon(
+                        Icons.image,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
-        )
-
-      ),
+            ],
+          )),
     );
 
     WidgetsBinding.instance!.addPostFrameCallback((_) => afterBuild(context));
 
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: Container(
-        margin: EdgeInsets.only(top: 60),
-        color: Colors.black,
-        child: Stack(
-          children: stackChildren,
+    return WillPopScope(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Row(
+            children: [
+              const Expanded(
+                child: Text("ndiabetes"),
+              ),
+              IconButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/homepage');
+                  },
+                  icon: Icon(Icons.logout))
+            ],
+          ),
+          automaticallyImplyLeading: false,
+        ),
+        backgroundColor: Colors.black,
+        body: Container(
+          margin: EdgeInsets.only(top: 60),
+          color: Colors.black,
+          child: Stack(
+            children: stackChildren,
+          ),
         ),
       ),
+      onWillPop: () async => false,
     );
   }
 
   void afterBuild(BuildContext context) {
-    if(!noImageScanned && _recognitions.isEmpty) {
+    if (!noImageScanned && _recognitions.isEmpty) {
       const snackBar = SnackBar(
         content: Text('No foods detected'),
       );
@@ -269,7 +295,8 @@ class _MyHomePageState extends State<ScanFoodPage> {
   }
 }
 
-Future<String?> asyncSimpleDialog(BuildContext context, String currentLabel) async {
+Future<String?> asyncSimpleDialog(
+    BuildContext context, String currentLabel) async {
   List<String> foods = ['Apple', 'Cake', 'Egg', 'Orange', 'Tomato'];
 
   foods.remove(currentLabel);
@@ -298,4 +325,3 @@ Future<String?> asyncSimpleDialog(BuildContext context, String currentLabel) asy
         );
       });
 }
-

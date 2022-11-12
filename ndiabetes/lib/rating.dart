@@ -22,7 +22,10 @@ class _RatingPageState extends State<RatingPage> {
 
   @override
   Widget build(BuildContext context) {
-    final arg = ModalRoute.of(context)!.settings.arguments as List<Recognition>;
+    final arg = ModalRoute
+        .of(context)!
+        .settings
+        .arguments as List<Recognition>;
 
     print(arg);
     //update the number of each food
@@ -34,7 +37,18 @@ class _RatingPageState extends State<RatingPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('ndiabetes'),
+        title: Row(
+          children: [
+            const Expanded(
+              child: Text("ndiabetes"),
+            ),
+            IconButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/homepage');
+                },
+                icon: Icon(Icons.logout))
+          ],
+        ),
         automaticallyImplyLeading: false, //remove back button in app bar
       ),
       body: CarbDetails(
@@ -58,18 +72,19 @@ class FoodBox extends StatelessWidget {
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-              Expanded(
-                  child: Container(
-                      padding: EdgeInsets.fromLTRB(80,10,80,10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(this.name,
-                              style: TextStyle(fontWeight: FontWeight.bold)),
-                          Text(this.carb.toString()),
-                        ],
-                      )))
-            ])));
+                  Expanded(
+                      child: Container(
+                          padding: EdgeInsets.fromLTRB(80, 10, 80, 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Text(this.name,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold)),
+                              Text(this.carb.toString()),
+                            ],
+                          )))
+                ])));
   }
 }
 
@@ -102,7 +117,7 @@ class _CarbDetailsState extends State<CarbDetails> {
     int totalCarb = 0;
 
     return FutureBuilder<QuerySnapshot>(
-        //Fetching data from the documentId specified of the student
+      //Fetching data from the documentId specified of the student
         future: _getEventsFromFirestore(foodToSearch),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasData) {
@@ -146,18 +161,20 @@ class _CarbDetailsState extends State<CarbDetails> {
                     Container(
                       margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
                       child: CircularPercentIndicator(
-                          radius: 80.0,
-                          lineWidth: 13.0,
-                          animation: true,
-                          percent: totalCarb > 53 ? 1.0 : totalCarb/53,
-                          center: Text(
-                                totalCarb.toString() + ' carbs',
-                                style:
-                                const TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
-                              ),
-                          circularStrokeCap: CircularStrokeCap.round,
-                          progressColor: totalCarb > 53 ? Colors.red : Colors.green,
+                        radius: 80.0,
+                        lineWidth: 13.0,
+                        animation: true,
+                        percent: totalCarb > 53 ? 1.0 : totalCarb / 53,
+                        center: Text(
+                          totalCarb.toString() + ' carbs',
+                          style:
+                          const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 20.0),
                         ),
+                        circularStrokeCap: CircularStrokeCap.round,
+                        progressColor: totalCarb > 53 ? Colors.red : Colors
+                            .green,
+                      ),
                     ),
                     Text("Carbohydrate Summary"),
                     SizedBox(
@@ -177,18 +194,21 @@ class _CarbDetailsState extends State<CarbDetails> {
                               height: 80,
                               child: Center(
                                   child: Text(
-                                totalCarb > 53
-                                    ? 'Exceeded carb limit'
-                                    : 'Safe to eat',
-                                style: TextStyle(
-                                    fontSize: 30,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white),
-                              )))),
+                                    totalCarb > 53
+                                        ? 'Exceeded carb limit'
+                                        : 'Safe to eat',
+                                    style: TextStyle(
+                                        fontSize: 30,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white),
+                                  )))),
                     ),
                     Container(
                       margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
                       child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              primary: Colors.blue[900]
+                          ),
                           onPressed: () {
                             Navigator.pushNamed(context, '/scan_food');
                           },
@@ -198,10 +218,16 @@ class _CarbDetailsState extends State<CarbDetails> {
             }
           }
           return Container(
-            height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          alignment: Alignment.center,
-            child: CircularProgressIndicator());
-              });
+              height: MediaQuery
+                  .of(context)
+                  .size
+                  .height,
+              width: MediaQuery
+                  .of(context)
+                  .size
+                  .width,
+              alignment: Alignment.center,
+              child: CircularProgressIndicator());
+        });
   }
 }
