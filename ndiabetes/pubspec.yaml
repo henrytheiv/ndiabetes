@@ -44,6 +44,7 @@ dependencies:
   flutterfire_ui: ^0.4.2+3
   percent_indicator: ^4.0.0
   introduction_screen: ^3.0.2
+  splash_view: ^2.0.1
 
 dev_dependencies:
   flutter_test:

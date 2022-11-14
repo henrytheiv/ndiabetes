@@ -15,11 +15,11 @@ class Classifier {
   /// Labels file loaded as list
   List<String> _labels = [];
 
-  static const String MODEL_FILE_NAME = "defaultModel5CMoreSteps.tflite";
-  static const String LABEL_FILE_NAME = "labelmap.txt";
+  static const String MODEL_FILE_NAME = "modelWithData.tflite";
+  static const String LABEL_FILE_NAME = "newLabel.txt";
 
   /// Input size of image ( width and height = 320)
-  static const int INPUT_SIZE = 300;
+  static const int INPUT_SIZE = 320;
 
   /// Result score threshold
   static const double THRESHOLD = 0.5;
@@ -122,7 +122,7 @@ class Classifier {
     //   }
     // }
 
-      List f32Reshaped = inputImage.buffer.asFloat32List().reshape([1, 300, 300, 3]);
+      List f32Reshaped = inputImage.buffer.asFloat32List().reshape([1, 320, 320, 3]);
 
     print(f32Reshaped.toString());
 
@@ -201,7 +201,7 @@ class Classifier {
         // inverse of rect
         // [locations] corresponds to the image size 300 X 300
         // inverseTransformRect transforms it our [inputImage]
-        print(imageProcessor!.operatorIndex);
+
         Rect transformedRect = imageProcessor!.inverseTransformRect(
             locations[i], image.height, image.width);
 

@@ -6,6 +6,8 @@ import 'package:flutter/services.dart';
 import 'package:ndiabetes/rating.dart';
 import 'package:ndiabetes/scan_food.dart';
 import 'package:ndiabetes/sign_up.dart';
+import 'package:splash_view/splash_view.dart';
+
 
 import 'home.dart';
 import 'introduction.dart';
@@ -27,7 +29,13 @@ class MyApp extends StatelessWidget {
         title: 'Introduction screen',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(primarySwatch: Colors.blue),
-        home: IntroductionPage(),
+        home: SplashView(
+          backgroundColor: Colors.white,
+          loadingIndicator: CircularProgressIndicator(color: Color(0xffbbdefb),),
+          logo: Image.asset("assets/ndiabetes.png"),
+          done: Done(IntroductionPage())
+        ),
+        // home: IntroductionPage(),
         routes: {
           '/homepage': (context) => const Homepage(),
           '/sign_up': (context) => const SignUpPage(),
@@ -36,3 +44,13 @@ class MyApp extends StatelessWidget {
         });
   }
 }
+
+// class Logo extends StatelessWidget {
+//   const Logo({Key? key}) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Image.asset("ndiabetes.png");
+//   }
+// }
+

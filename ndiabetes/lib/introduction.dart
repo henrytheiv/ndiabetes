@@ -82,6 +82,7 @@ class _IntroductionPageState extends State<IntroductionPage> {
               "Capture or upload an image of your meal to detect if it's safe to consume",
           image: _buildImage('take_pic.png'),
           decoration: pageDecoration,
+
         ),
         PageViewModel(
           title: "End Diabetes!",
