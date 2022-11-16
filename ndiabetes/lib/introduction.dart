@@ -6,6 +6,8 @@ import 'package:introduction_screen/introduction_screen.dart';
 import 'home.dart';
 
 class IntroductionPage extends StatefulWidget {
+  const IntroductionPage({Key? key}) : super(key: key);
+
   @override
   _IntroductionPageState createState() => _IntroductionPageState();
 }

@@ -89,7 +89,7 @@ class _Homepage extends State<Homepage> {
                                     ),
                                     borderRadius: BorderRadius.circular(5.0),
                                   ),
-                                  hintText: "Username",
+                                  hintText: "Email",
                                   // prefixIcon: Icon(
                                   //   Icons.search,
                                   //   color: Colors.black,
@@ -219,7 +219,7 @@ class _Homepage extends State<Homepage> {
                                         'No user found for that email.');
                                   } else if (e.code == 'wrong-password') {
                                     createSnackBar(
-                                        'Wrong password provided for that user.');
+                                        'Wrong password.');
                                   }
                                 }
                               }

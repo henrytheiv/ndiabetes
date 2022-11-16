@@ -1,13 +1,11 @@
 import 'dart:async';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ndiabetes/rating.dart';
 import 'package:ndiabetes/scan_food.dart';
 import 'package:ndiabetes/sign_up.dart';
-import 'package:splash_view/splash_view.dart';
-
+import 'package:ndiabetes/splash.dart';
 
 import 'home.dart';
 import 'introduction.dart';
@@ -29,18 +27,15 @@ class MyApp extends StatelessWidget {
         title: 'Introduction screen',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(primarySwatch: Colors.blue),
-        home: SplashView(
-          backgroundColor: Colors.white,
-          loadingIndicator: CircularProgressIndicator(color: Color(0xffbbdefb),),
-          logo: Image.asset("assets/ndiabetes.png"),
-          done: Done(IntroductionPage())
-        ),
+        initialRoute: '/splash',
         // home: IntroductionPage(),
         routes: {
           '/homepage': (context) => const Homepage(),
           '/sign_up': (context) => const SignUpPage(),
           '/scan_food': (context) => const ScanFoodPage(),
           '/rating': (context) => const RatingPage(),
+          '/splash': (contect) => const SplashScreen(),
+          '/intro': (context) => const IntroductionPage()
         });
   }
 }
@@ -53,4 +48,3 @@ class MyApp extends StatelessWidget {
 //     return Image.asset("ndiabetes.png");
 //   }
 // }
-
