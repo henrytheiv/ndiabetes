@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:ndiabetes/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:splash_view/source/presentation/pages/splash_view.dart';
 import 'package:splash_view/source/presentation/widgets/done.dart';
@@ -15,16 +16,18 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
 
+  bool _goToIntro = true;
+
   Future checkFirstSeen() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool _seen = (prefs.getBool('seen') ?? false);
 
-    if (_seen) {
-      Navigator.pushNamed(context, '/homepage');
-    } else {
+    if (!_seen) {
       await prefs.setBool('seen', true);
-      Navigator.pushNamed(context, '/intro');
     }
+    setState(() {
+      _goToIntro = !_seen;
+    });
   }
 
   @override
@@ -39,6 +42,8 @@ class _SplashScreenState extends State<SplashScreen> {
         backgroundColor: Colors.blue,
         loadingIndicator: CircularProgressIndicator(color: Color(0xffbbdefb),),
         logo: Image.asset("assets/ndiabetes.png"),
+        done: _goToIntro ? Done(IntroductionPage()) : Done(Homepage()),
+      showStatusBar: true,
     );
   }
 
